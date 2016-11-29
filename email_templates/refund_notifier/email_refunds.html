@@ -1,0 +1,17 @@
+<!doctype html>
+<table>
+    <tr>
+        <th>Date</th>
+        <th>From</th>
+        <th>To</th>
+        <th>Fare</th>
+    </tr>    
+    {% for refund in refunds %}
+    <tr>
+        <td>{{ refund.refund_date.strftime('%d/%m/%Y') }}</td>
+        <td>{{ refund.refund_from }} </td>
+        <td>{{ refund.refund_to }} </td>
+        <td>{{ refund.refund_fare }}</td>
+    </tr>       
+    {% endfor %}
+</table>    

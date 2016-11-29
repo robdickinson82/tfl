@@ -1,0 +1,34 @@
+<!doctype html>
+<title>Card Detail: {{card.nickname}}</title>
+<p><a href='/cards/'>Back to all cards</a></p>
+<table>
+    <tr>
+        <th>Reference</th>
+        <th>Nickname</th>
+        <th>Expiry</th>
+        <th>Status</th>
+    </tr>    
+    <tr>
+        <td>{{ card.reference }}</td>
+        <td>{{ card.nickname }}</td>
+        <td>{{ card.expiry }}</td>
+        <td>{{ card.status }}</td>
+    </tr> 
+</table>
+</br>
+<table>
+    <tr>
+        <th>Date + Time</th>
+        <th>From</th>
+        <th>To</th>
+        <th>Fare</th>
+    </tr>    
+    {% for journey in journeys %}
+    <tr>
+        <td>{{ journey.start_time.strftime('%d/%m/%Y %H:%M') }}</td>
+        <td>{{ journey.journey_from }} ({{ format_time(journey.start_time, '%H:%M') }})</td>
+        <td>{{ journey.journey_to }} ({{ format_time(journey.end_time, '%H:%M') }})</td>
+        <td>{{ format_fare (journey.fare) }}</td>
+    </tr>       
+    {% endfor %}
+</table>    

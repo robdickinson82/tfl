@@ -1,0 +1,24 @@
+<!doctype html>
+<title>Hello from Blah Flask</title>
+<table>
+    <tr>
+        <th>Reference</th>
+        <th>Nickname</th>
+        <th>Expiry</th>
+        <th>Status</th>
+        <th>Notifications</th>
+    </tr>    
+	{% for card in cards %}
+    <tr>
+        <td><a href='/card/{{ cards[card].reference }}' >{{ cards[card].reference }}</a></td>
+        <td>{{ cards[card].nickname }}</td>
+        <td>{{ cards[card].expiry }}</td>
+        <td>{{ cards[card].status }}</td>
+        <td>
+            {% for notification in cards[card].notifications %}
+            {{ notification.text }}</br>
+            {% endfor %}
+        </td>
+    </tr>   
+	{% endfor %}
+</table>

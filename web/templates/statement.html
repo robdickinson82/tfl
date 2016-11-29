@@ -1,0 +1,7 @@
+<!doctype html>
+<title>Hello from Blah Flask</title>
+<table>
+	{% for entry in statement.entries %}
+    	<tr><td>{{ entry.date }}</td><td>{{ entry.amount }}</td></tr>
+	{% endfor %}	
+</table>

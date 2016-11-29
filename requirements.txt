@@ -1,0 +1,4 @@
+Flask
+boto
+bs4
+requests
