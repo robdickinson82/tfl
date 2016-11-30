@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from config import *
 import re
 from bsHelpers import getSoupFromHtml
@@ -157,7 +158,7 @@ class Journey:
     def _extract_journey_fare(self, soup):
         text_fare = soup.find(attrs={"data-pageobject": "journey-fare"})
         text_fare = text_fare.string.encode("utf-8")
-        line_match = re.match("(?P<pounds>[\d]+)\.(?P<pence>[\d]{2})",
+        line_match = re.match(r"£(?P<pounds>[\d]+)\.(?P<pence>[\d]{2})",
                               text_fare)
         int_fare = (int(line_match.group("pounds")) * 100
                     + int(line_match.group("pence")))
