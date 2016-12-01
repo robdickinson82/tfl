@@ -1,5 +1,6 @@
 from config import *
 import re
+import logging
 from bsHelpers import getSoupFromHtml
 from datetime import datetime
 from requests import Session
@@ -10,6 +11,8 @@ from journey import Journey
 from card import Card
 from refund import Refund
 
+import logging
+
 
 class TflSession(Session):
     LOGINURL = "https://account.tfl.gov.uk/"
@@ -17,12 +20,14 @@ class TflSession(Session):
 
 
     def __init__(self, user):
+        logging.info('Creating A TflSession')
         Session.__init__(self)
         self.user = user
         self.card = Card(self)
         self.login()
 
     def login(self):
+        logging.info('Logging in for %s', self.user.username)
         response = self.get(self.BASEURL)
         url = self.LOGINURL + "Login"
         data = {
@@ -36,23 +41,21 @@ class TflSession(Session):
         return
 
     def tfl_get(self, url):
-        print("Getting " + url)
         response = self.get(self.BASEURL + url)
         return response
 
     def tfl_post(self, url, data):
-        print("Posting " + url)
         response = self.post(self.BASEURL + url, data)
         return response
 
     def _tfl_get_soup(self, url):
-        print("Getting " + url)
+        logging.info("Getting " + url)
         response = self.get(self.BASEURL + url)
         card_soup = getSoupFromHtml(response.text)
         return card_soup
 
     def _tfl_post_soup(self, url, data):
-        print("Posting " + url)
+        logging.info("Posting " + url)
         response = self.post(self.BASEURL + url, data)
         card_soup = getSoupFromHtml(response.text)
         return card_soup
