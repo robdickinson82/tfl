@@ -6,12 +6,12 @@ from datetime import datetime
 from requests import Session
 from string import split
 from hashlib import md5
-from collections import namedtuple
+from collections import namedtuple, OrderedDict
 
 
 class Refund():
 
-    RefundObj = namedtuple('RefundObj', 'journey_id t_id travelDayKey refund_from refund_to refund_date refund_fare')
+    RefundObj = namedtuple('RefundObj', 'refund_id journey_id t_id travelDayKey refund_from refund_to refund_date refund_fare')
 
     def __init__(self, card):
         self.card = card
@@ -24,7 +24,7 @@ class Refund():
         return (refunds)
 
     def _extract_refunds(self, refund_soup):
-        refunds = ()
+        refunds = OrderedDict()
         refunds_html = refund_soup.findAll('a', attrs={'data-pageobject': 'statement-detaillink'})
         for refund_html in refunds_html:
             params = self.card.session.extract_link_params(refund_html["href"])
@@ -37,8 +37,9 @@ class Refund():
             refund_date = re.sub(r"(\d+)(st|nd|rd|th)", r"\1", refund_date)
             refund_date = datetime.strptime(refund_date, '%A %d %B %Y')
             refund_fare = self._extract_journey_fare(refund_html)
-            refund = self.RefundObj._make([journey_id, t_id, travelDayKey, refund_from, refund_to, refund_date, refund_fare])
-            refunds = refunds + (refund, )
+            refund_id = md5((refund_from + refund_to + refund_date.strftime('%d/%m/%Y') + str(refund_fare)).encode()).hexdigest()
+            refund = self.RefundObj._make([refund_id, journey_id, t_id, travelDayKey, refund_from, refund_to, refund_date, refund_fare])
+            refunds[refund_id] = refund
         return refunds
 
     def _extract_journey_fare(self, soup):
