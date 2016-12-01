@@ -8,10 +8,10 @@
     </tr>    
     {% for refund in refunds %}
     <tr>
-        <td>{{ refund.refund_date.strftime('%d/%m/%Y') }}</td>
-        <td>{{ refund.refund_from }} </td>
-        <td>{{ refund.refund_to }} </td>
-        <td>{{ '£{0:0.2f}'.format(refund.refund_fare/100.0) }}</td>
+        <td>{{ refunds[refund].refund_date.strftime('%d/%m/%Y') }}</td>
+        <td>{{ refunds[refund].refund_from }} </td>
+        <td>{{ refunds[refund].refund_to }} </td>
+        <td>{{ '£{0:0.2f}'.format(refunds[refund].refund_fare/100.0) }}</td>
     </tr>       
     {% endfor %}
 </table>    
