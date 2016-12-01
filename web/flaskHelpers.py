@@ -47,9 +47,9 @@ def card_refunds_update(card_ref):
     cards = user.session.card.get_all()
     pi_ref = cards[card_ref].pi_ref
     card = user.session.card.get(pi_ref)
-    journeys = user.session.card.refund.get_all(card_ref)
+    refunds = user.session.card.refund.get_all(pi_ref)
     #journeys = sorted(card.journeys.items(), key= lambda x: (x[1]).date, reverse=True)
-    html = render_template('journeys.html', card = card, journeys = journeys)
+    html = render_template('refunds.html', card = card, refunds = refunds)
     return html
 
 
