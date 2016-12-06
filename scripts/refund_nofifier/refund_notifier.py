@@ -8,7 +8,8 @@ from config import (USERNAME,
                    AWS_REGION, 
                    HELPER_PATH, 
                    EMAIL_TEMPLATE_PATH, 
-                   LOG_PATH, LOG_FORMAT)
+                   LOG_PATH, LOG_FORMAT,
+                   SERVER_URL)
 sys.path.append(HELPER_PATH)
 
 from flask import Flask
@@ -47,7 +48,7 @@ for card in cards:
 logging.debug('Getting all refunds for cards - %s', all_refunds)
 
 logging.info('Rendering template')
-html = template.render(refunds=all_refunds)
+html = template.render(refunds=all_refunds, base_url=SERVER_URL)
 
 logging.info('Sending email')
 ses.send_email('dickinson.rob@gmail.com', ['dickinson.rob@gmail.com'], "TFL Refunds Available", html)

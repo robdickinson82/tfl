@@ -5,6 +5,7 @@
         <th>From</th>
         <th>To</th>
         <th>Fare</th>
+        <th>Link</th>
     </tr>    
     {% for refund in refunds %}
     <tr>
@@ -12,6 +13,7 @@
         <td>{{ refunds[refund].refund_from }} </td>
         <td>{{ refunds[refund].refund_to }} </td>
         <td>{{ '£{0:0.2f}'.format(refunds[refund].refund_fare/100.0) }}</td>
+        <td><a href="{{ base_url }}/card/{{ refunds[refund].parent_card_id }}/refund/{{refunds[refund].refund_id}}/application">Apply</a></td>
     </tr>       
     {% endfor %}
 </table>    

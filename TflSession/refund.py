@@ -13,16 +13,17 @@ import logging
 
 class Refund():
 
-    RefundObj = namedtuple('RefundObj', 'refund_id journey_id t_id travelDayKey refund_from refund_to refund_date refund_fare')
+    RefundObj = namedtuple('RefundObj', 'refund_id journey_id t_id travelDayKey refund_from refund_to refund_date refund_fare parent_card_id')
 
     def __init__(self, card):
         self.card = card
 
 
     def get_all(self, card_ref):
+        card = self.card.get(card_ref)
         url = 'Card/Refunds?pi=' + card_ref
         refund_soup = self.card.session._tfl_get_soup(url)
-        refunds = self._extract_refunds(refund_soup)
+        refunds = self._extract_refunds(refund_soup, card.reference)
         return (refunds)
 
     def start_application(self, ti_ref, ji_ref, travelDayKey):
@@ -77,7 +78,7 @@ class Refund():
 
         return 
 
-    def _extract_refunds(self, refund_soup):
+    def _extract_refunds(self, refund_soup, card_ref):
         refunds = OrderedDict()
         refunds_html = refund_soup.findAll('a', attrs={'data-pageobject': 'statement-detaillink'})
         for refund_html in refunds_html:
@@ -92,7 +93,7 @@ class Refund():
             refund_date = datetime.strptime(refund_date, '%A %d %B %Y')
             refund_fare = self._extract_journey_fare(refund_html)
             refund_id = md5((refund_from + refund_to + refund_date.strftime('%d/%m/%Y') + str(refund_fare)).encode()).hexdigest()
-            refund = self.RefundObj._make([refund_id, journey_id, t_id, travelDayKey, refund_from, refund_to, refund_date, refund_fare])
+            refund = self.RefundObj._make([refund_id, journey_id, t_id, travelDayKey, refund_from, refund_to, refund_date, refund_fare, card_ref])
             refunds[refund_id] = refund
         return refunds
 
