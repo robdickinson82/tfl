@@ -9,6 +9,6 @@ from flaskHelpers import start_server
 
 import logging
 
-logging.basicConfig(filename=LOG_PATH+'tfl_web.log', format=LOG_FORMAT, level=logging.DEBUG)
+
 
 start_server()
