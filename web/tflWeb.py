@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
-from config import USERNAME, PASSWORD, DEBUG, LOG_PATH, LOG_FORMAT
+import sys
+sys.path.append(".")
+sys.path.append("..")
+from config import HELPER_PATH, USERNAME, PASSWORD, DEBUG, LOG_PATH, LOG_FORMAT
+sys.path.append(HELPER_PATH)
 
 from flask import Flask
 from flask import render_template, request, redirect
