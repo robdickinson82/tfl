@@ -1,0 +1,20 @@
+<!doctype html>
+<title>Refund Application for: {{card.nickname}}</title>
+<p>Applying for Refund</p>
+<P>date: {{refund.refund_date}}</p>
+<P>From: {{refund.refund_from}}</p>
+<P>To: {{refund.refund_to}}</p>    
+<form action = '/card/{{card.reference}}/refund/{{refund.refund_id}}/application?sessionKey={{session_key}}' method='post'>
+    {% for input in inputs %}
+    {{input}}: <input name='{{input}}' value='{{inputs[input]}}'></input></br>
+    {% endfor %}
+
+    {% for select in selects %}
+    {{select}}: <select name='{{select}}' >
+        {% for option in selects[select]['options'] %}
+            <option value='{{option}}'>{{selects[select]['options'][option]}}</option>
+        {% endfor %}    
+    </select></br>
+    {% endfor %}
+    <button type='submit'>Submit</button>
+</form>

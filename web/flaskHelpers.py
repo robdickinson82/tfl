@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
-from config import USERNAME, PASSWORD, DEBUG
+from config import USERNAME, PASSWORD, DEBUG, LOG_PATH, LOG_FORMAT
 
 from flask import Flask
-from flask import render_template, request
+from flask import render_template, request, redirect
 from TflSession.user import User
 
+import logging
+
 app = Flask(__name__)
+app.logger.addHandler(logging.basicConfig(filename=LOG_PATH+'tfl_web.log', format=LOG_FORMAT, level=logging.DEBUG))
+
 
 user = User(USERNAME, PASSWORD)
 
@@ -52,6 +56,27 @@ def card_refunds_update(card_ref):
     html = render_template('refunds.html', card = card, refunds = refunds)
     return html
 
+@app.route('/card/<card_ref>/refund/<refund_id>/application', methods = ['GET', 'POST'])
+def card_refund_create_application(card_ref, refund_id):
+    cards = user.session.card.get_all()
+    pi_ref = cards[card_ref].pi_ref
+    card = user.session.card.get(pi_ref)
+    refunds = user.session.card.refund.get_all(pi_ref)
+    refund = refunds[refund_id]
+    if request.method == 'GET':
+        application_data = user.session.card.refund.start_application(refund.t_id, refund.journey_id, refund.travelDayKey)
+        inputs = application_data["inputs"]
+        selects = application_data["selects"]
+        session_key = application_data["link_params"]["sessionKey"]
+        html = render_template('refund_application.html', card = card, refund = refund, inputs=inputs, selects=selects, session_key=session_key)
+    elif request.method == 'POST':
+        month = refund.refund_date.strftime('%m')
+        year = refund.refund_date.strftime('%Y')
+        session_key = request.args.get('sessionKey')
+        application_data = user.session.card.refund.submit_application(pi_ref, refund.t_id, refund.journey_id, refund.travelDayKey, month, year, session_key, request.form) 
+
+        return redirect("/card/"+card_ref+"/refunds", code=302)
+    return html
 
 def start_server():
 	app.debug = DEBUG

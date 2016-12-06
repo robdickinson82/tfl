@@ -10,6 +10,8 @@ from collections import namedtuple
 from journey import Journey
 from refund import Refund
 
+import logging
+
 class Card():
 
     CardObj = namedtuple('CardObj', 'pi_ref nickname status expiry reference card_id notifications')
@@ -23,6 +25,7 @@ class Card():
         return
 
     def get(self, card_ref):
+        logging.debug('Entering Card GET')
         url = "Card/View?pi=" + card_ref
         card_soup = self.session._tfl_get_soup(url)
         #card = self._create_card_tuple()
@@ -32,13 +35,14 @@ class Card():
         expiry = self._extract_expiry(card_soup)
         reference = self._extract_reference(card_soup)
         card_id = md5(card_nickname.encode()).hexdigest()
-        notifications = self._extract_notifications(card_soup)
+        notifications = []
         card = self.CardObj._make([pi_ref, card_nickname, card_status, expiry, reference, card_id, notifications])
 
         #print([method for method in dir(card) if callable(getattr(card, method))])
         return card
 
     def get_all(self):
+        logging.debug('Entering Card GET ALL')
         url = "MyCards"
         cards_soup = self.session._tfl_get_soup(url)
         html_cards = cards_soup.findAll("a",

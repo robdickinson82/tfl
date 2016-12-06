@@ -16,21 +16,22 @@
     </tr> 
 </table>
 </br>
-<p>Journeys <a href='/card/{{card.reference}}/refunds'>Refunds</a></p>
+<p><a href='/card/{{card.reference}}'>Journeys</a> Refunds</p>
 </br>
 <table>
     <tr>
-        <th>Date + Time</th>
+        <th>Date</th>
         <th>From</th>
         <th>To</th>
         <th>Fare</th>
     </tr>    
-    {% for journey in journeys %}
+    {% for refund in refunds %}
     <tr>
-        <td>{{ journey.start_time.strftime('%d/%m/%Y %H:%M') }}</td>
-        <td>{{ journey.journey_from }} ({{ format_time(journey.start_time, '%H:%M') }})</td>
-        <td>{{ journey.journey_to }} ({{ format_time(journey.end_time, '%H:%M') }})</td>
-        <td>{{ format_fare (journey.fare) }}</td>
+        <td>{{ refunds[refund].refund_date.strftime('%d/%m/%Y') }}</td>
+        <td>{{ refunds[refund].refund_from }}</td>
+        <td>{{ refunds[refund].refund_to }}</td>
+        <td>{{ format_fare (refunds[refund].refund_fare) }}</td>
+        <td><a href='/card/{{card.reference}}/refund/{{refunds[refund].refund_id}}/application'>Apply for Refund</a></td>
     </tr>       
     {% endfor %}
 </table>    
