@@ -66,7 +66,7 @@ class TestBasicTests(unittest.TestCase):
         card = self.get_a_card(user)
         refunds = user.session.card.refund.get_all(card.pi_ref)
         refund = refunds[refunds.keys()[0]]
-        output = user.session.card.refund.start_apply(refund.t_id, refund.journey_id, refund.travelDayKey)
+        output = user.session.card.refund.start_application(refund.t_id, refund.journey_id, refund.travelDayKey)
         logging.info(output)
 
     def get_a_card(self, user):
