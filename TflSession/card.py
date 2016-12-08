@@ -25,7 +25,7 @@ class Card():
         return
 
     def get(self, card_ref):
-        self.card.session.refresh()
+        self.session.refresh()
         logging.debug('Entering Card GET')
         url = "Card/View?pi=" + card_ref
         card_soup = self.session._tfl_get_soup(url)
@@ -43,7 +43,7 @@ class Card():
         return card
 
     def get_all(self):
-        self.card.session.refresh()
+        self.session.refresh()
         logging.debug('Entering Card GET ALL')
         url = "MyCards"
         cards_soup = self.session._tfl_get_soup(url)

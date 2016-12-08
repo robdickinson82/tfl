@@ -20,6 +20,7 @@ class Refund():
 
 
     def get_all(self, card_ref):
+        self.card.session.refresh()
         card = self.card.get(card_ref)
         url = 'Card/Refunds?pi=' + card_ref
         refund_soup = self.card.session._tfl_get_soup(url)
@@ -27,6 +28,7 @@ class Refund():
         return (refunds)
 
     def start_application(self, ti_ref, ji_ref, travelDayKey):
+        self.card.session.refresh()
         url = 'Refunds/Apply?ti='+ ti_ref +'&ji='+ ji_ref + '&travelDayKey=' + travelDayKey
         refund_application_soup = self.card.session._tfl_get_soup(url)
         form_soup = refund_application_soup.find(attrs={'id': 'page-content'}).form
@@ -56,6 +58,7 @@ class Refund():
         return form_data
 
     def submit_application(self, pi_ref, ti_ref, ji_ref, travelDayKey, month, year, sessionKey, form_data):
+        self.card.session.refresh()
         url = 'Refunds/Confirm?pi='+pi_ref+'&ti='+ti_ref+'&st=Journeys&sp='+month+'|'+year+'&ji='+ji_ref+'&sessionKey='+sessionKey+'&travelDayKey='+travelDayKey
         submit_application_soup = self.card.session._tfl_post_soup(url, form_data.to_dict())
 
