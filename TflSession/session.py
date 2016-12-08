@@ -50,6 +50,20 @@ class TflSession(Session):
         self.card.session.cookies.clear_session_cookies()
         return logout_soup
 
+    def refresh(self):
+        url = "MyCards"
+        cards_soup = self._tfl_get_soup(url)
+        response = self.get(self.BASEURL + url)
+        response_history = response.history
+        needs_refresh = False
+        if (len(response_history) > 0):
+            for old_response in response_history:
+                if ("LoginTimedOut" in old_response.headers["location"]):
+                    needs_refresh = True
+        if needs_refresh:
+            self.login()
+        return needs_refresh
+
     def tfl_get(self, url):
         response = self.get(self.BASEURL + url)
         logging.log(reponse.request.cookies)

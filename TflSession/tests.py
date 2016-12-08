@@ -36,6 +36,24 @@ class TestBasicTests(unittest.TestCase):
 
         logging.info('END: Testing Logging Out User')
 
+    def test_refresh(self):
+        logging.info('START: Testing Refreshing Session')
+        user = User(USERNAME, PASSWORD)
+        self.assertIsNotNone(user)
+        cards = user.session.card.get_all()
+        self.assertNotEqual(0, len(cards.keys()))
+        logout = user.session.logout()
+        cards = user.session.card.get_all()
+        self.assertEqual(0, len(cards.keys()))
+        needs_refresh = user.session.refresh()
+        self.assertTrue(needs_refresh)
+        cards = user.session.card.get_all()
+        self.assertNotEqual(0, len(cards.keys()))
+        needs_refresh = user.session.refresh()
+        self.assertFalse(needs_refresh)
+        logging.info('END: Testing Refreshing Session')
+
+
     def test_get_cards(self):
         logging.info('START: Testing Getting Cards for a User')
         user = User(USERNAME, PASSWORD)
