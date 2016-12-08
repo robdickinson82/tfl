@@ -53,7 +53,7 @@ class Journey:
             "PaymentCardId": pi_ref
         }
 
-        statement_soup = _tfl_post_soup(url, data)
+        statement_soup = self.card.session._tfl_post_soup(url, data)
 
         html_statement_dates = statement_soup.findAll(attrs=
                                                          {"data-pageobject":
@@ -107,7 +107,7 @@ class Journey:
     def _get_verification_token(self, card_ref):
         self.card.session.refresh()
         url = "/Statements/TravelStatement?pi=" + card_ref
-        statement_soup = _tfl_get_soup(url)
+        statement_soup = self.card.session._tfl_get_soup(url)
         
         verification_token = statement_soup.find(attrs=
                                                  {"name":
