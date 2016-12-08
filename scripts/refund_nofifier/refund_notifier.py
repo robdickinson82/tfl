@@ -37,7 +37,6 @@ ses = Ses(AWS_REGION, AWS_ACCESS_KEY, AWS_SECRET_KEY)
 db_users = db.User.query.all()
 
 for db_user in db_users:
-  print(db_user.id)
   tfl_user = user.User(db_user.username, db_user.password)
   
   logging.info('Getting all cards')
@@ -45,7 +44,6 @@ for db_user in db_users:
 
   all_refunds = OrderedDict()
   for card in cards:
-      print(card)
       logging.info('Getting refunds for card - %s', cards[card].reference)
       refunds = tfl_user.session.card.refund.get_all(cards[card].pi_ref)
       logging.info('Got refunds - %s', refunds.keys())
