@@ -10,15 +10,31 @@ import logging
 from config import USERNAME, PASSWORD, LOG_PATH, LOG_FORMAT
 from user import User
 
-logging.basicConfig(filename=LOG_PATH+'tflSession_tests.log', format=LOG_FORMAT, level=logging.INFO)
+logging.basicConfig(filename=LOG_PATH+'tflSession_tests.log',
+                    format=LOG_FORMAT,
+                    level=logging.DEBUG)
+
 
 class TestBasicTests(unittest.TestCase):
+# python tests.py TestBasicTests
 
     def test_create_user(self):
         logging.info('START: Testing Creating User')
         user = User(USERNAME, PASSWORD)
         self.assertIsNotNone(user)
         logging.info('END: Testing Creating User')
+
+    def test_logout(self):
+        logging.info('START: Testing Logging Out User')
+        user = User(USERNAME, PASSWORD)
+        self.assertIsNotNone(user)
+        cards = user.session.card.get_all()
+        self.assertNotEqual(0, len(cards.keys()))
+        logout = user.session.logout()
+        cards = user.session.card.get_all()
+        self.assertEqual(0, len(cards.keys()))
+
+        logging.info('END: Testing Logging Out User')
 
     def test_get_cards(self):
         logging.info('START: Testing Getting Cards for a User')
@@ -43,13 +59,17 @@ class TestBasicTests(unittest.TestCase):
         logging.info('Got Card : %s', card.reference)
         logging.debug('Got Card : %s', card)
         logging.info('END: Testing Getting Card Detail')
-    
+
     def test_get_journeys(self):
         logging.info('START: Testing Getting Journeys')
         user = User(USERNAME, PASSWORD)
         card = self.get_a_card(user)
         card_pi_ref = card.pi_ref
-        journeys = user.session.card.journey.get_journey_month_range(card_pi_ref, 7, 2016, 8, 2016)
+        journeys = user.session.card.journey.get_journey_month_range(card_pi_ref, 
+                                                                     7, 
+                                                                     2016, 
+                                                                     8, 
+                                                                     2016)
         return
 
     def test_get_refunds(self):
