@@ -66,12 +66,10 @@ class TflSession(Session):
 
     def tfl_get(self, url):
         response = self.get(self.BASEURL + url)
-        logging.log(reponse.request.cookies)
         return response
 
     def tfl_post(self, url, data):
         response = self.post(self.BASEURL + url, data)
-        logging.log(reponse.request.cookies)
         return response
 
     def _tfl_get_soup(self, url, base_url=None):
