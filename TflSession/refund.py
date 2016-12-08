@@ -62,10 +62,7 @@ class Refund():
         page_content_soup = submit_application_soup.find(attrs={'id': 'page-content'})
 
         button_soup = page_content_soup.find(attrs={'id':'confirmrefund-submit-button'})
-        logging.info(button_soup)
-
         form_soup = button_soup.parent.parent
-        logging.info(form_soup)
         input_soup = form_soup.input
 
         data = {input_soup["name"]: input_soup["value"]}

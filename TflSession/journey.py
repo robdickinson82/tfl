@@ -16,7 +16,7 @@ class Journey:
         self.card = card
         
 
-    def get_journey_month_range(self, pi_ref, start_month, start_year, end_month = None, end_year = None):
+    def get_journey_month_range(self, pi_ref, start_month, start_year, end_month = None, end_year = None): 
         start_month_since_0bc = start_year * 12 + start_month - 1
         current_month_since_0bc = start_month_since_0bc
         if ((not end_year) or (not end_month)):
@@ -39,6 +39,7 @@ class Journey:
         return all_journeys
 
     def _get_single_month(self, pi_ref, month, year):
+        self.card.session.refresh()
         view_type = "Payments"
         
         verification_token = self._get_verification_token(pi_ref)
@@ -105,6 +106,7 @@ class Journey:
         return journeys
 
     def _get_verification_token(self, card_ref):
+        self.card.session.refresh()
         url = "/Statements/TravelStatement?pi=" + card_ref
         response = self.card.session.tfl_get(url)
         statement_soup = getSoupFromHtml(response.text)
